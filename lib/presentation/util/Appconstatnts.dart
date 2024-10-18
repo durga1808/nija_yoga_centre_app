@@ -5,8 +5,8 @@ import 'package:intl/intl.dart';
 
 class AppConstants {
   //static const String LIVE_URL = 'http://192.168.0.103:3000/YogaApp/';
-  //  static const String LOCAL_URL = 'http://nija.ddns.net:93/NewYogaApp/';
-   static const String LOCAL_URL = 'http://192.168.29.121:3000/YogaApp/';
+    static const String LOCAL_URL = 'http://nija.ddns.net:93/NewYogaApp/';
+ //  static const String LOCAL_URL = 'http://192.168.29.121:3000/YogaApp/';`
   static const String SESSIONTOKEN = 'Token';
   static const String SESSIONLOGGEDIN = "LoggedIn";
   static const String Login = 'getuserlogin';
