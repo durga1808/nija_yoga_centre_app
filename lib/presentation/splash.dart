@@ -1,6 +1,8 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:yoga_centre_app/presentation/dashboard/admindashboardscreen.dart';
 
 import 'package:yoga_centre_app/presentation/dashboard/dashboardscreen.dart';
 import 'package:yoga_centre_app/presentation/loginscreen/loginscreen.dart';
@@ -36,11 +38,11 @@ class _SplashScreenState extends State<SplashScreen> {
           borderRadius: BorderRadius.zero,
           border: Border.all(color: const Color(0x4d9e9e9e), width: 1),
         ),
-        child: const Stack(
+        child:  Stack(
           alignment: Alignment.center,
           children: [
             Image(
-              image: AssetImage("assets/images/maharishi1.png"),
+              image: AssetImage("assets/images/statue.png"),
               //height: 100,
               fit: BoxFit.fill,
             ),
@@ -74,6 +76,6 @@ class _SplashScreenState extends State<SplashScreen> {
                     (Prefs.getLoggedIn("IsLoggedIn") == null ||
                             Prefs.getLoggedIn("IsLoggedIn") == false)
                         ? const LoginScreen()
-                        :  DashboardScreen())));
+                        : Prefs.getSupeUser("SuperUser")== 1 ? AdminDashBoardScreen():  DashboardScreen())));
   }
 }

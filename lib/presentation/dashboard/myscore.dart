@@ -1,10 +1,13 @@
+import 'dart:ui';
+
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:yoga_centre_app/data/api_service.dart';
+import 'package:yoga_centre_app/l10n/localization.dart';
+import 'package:yoga_centre_app/main.dart';
 import 'dart:convert';
-
 import 'package:yoga_centre_app/presentation/model/coursemodel.dart';
 import 'package:yoga_centre_app/presentation/util/Appconstatnts.dart';
 import 'package:yoga_centre_app/presentation/util/app_util.dart';
@@ -29,6 +32,12 @@ class _MyScorePageState extends State<Myscore> {
   String altercourseid = "";
   String altercoursename = "";
   TextEditingController reasoncontroller = TextEditingController();
+
+  void _changeLanguage(String langCode) {
+    Locale newLocale = Locale(langCode);
+    MainApp.setLocale(context, newLocale);
+  }
+
   @override
   void initState() {
     getenrollmaster();
@@ -47,7 +56,28 @@ class _MyScorePageState extends State<Myscore> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Score'),
+        title: Text(
+          AppLocalizations.of(context)?.myscoretitle ?? 'My Score',
+          style: const TextStyle(
+            fontSize: 18,
+            color: Colors.white,
+            // fontWeight: FontWeight.bold,
+          ),
+        ),
+        actions: [
+          PopupMenuButton<String>(
+              color: Colors.white,
+              onSelected: (String languageCode) async {
+                await Prefs.setLanguage("Language", languageCode);
+                Locale myLocale =
+                    Locale(languageCode, languageCode == 'ta' ? 'IN' : 'US');
+                MainApp.setLocale(context, myLocale);
+              },
+              itemBuilder: (context) => const [
+                    PopupMenuItem(value: 'en', child: Text('English')),
+                    PopupMenuItem(value: 'ta', child: Text('தமிழ்'))
+                  ])
+        ],
       ),
       body: !_isLoading
           ? Padding(
@@ -70,7 +100,7 @@ class _MyScorePageState extends State<Myscore> {
                             Expanded(
                               child: Text(
                                 'Selected Date: ${DateFormat('yyyy-MM-dd').format(_selectedDate)}',
-                                style: const TextStyle(fontSize: 16),
+                                style: TextStyle(fontSize: 16),
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
@@ -84,7 +114,8 @@ class _MyScorePageState extends State<Myscore> {
                       const SizedBox(height: 10),
                       DropdownSearch<String>(
                         key: dropDownKey,
-                        selectedItem: "Course",
+                        selectedItem:
+                            AppLocalizations.of(context)?.course ?? "Course",
                         items: courselist,
                         popupProps: const PopupProps.menu(
                           showSearchBox: true,
@@ -133,9 +164,10 @@ class _MyScorePageState extends State<Myscore> {
                       const SizedBox(height: 10),
                       TextField(
                         controller: _angryCountController,
-                        decoration: const InputDecoration(
+                        decoration: InputDecoration(
                           border: OutlineInputBorder(),
-                          labelText: 'No.Of Occurrence',
+                          labelText:
+                              AppLocalizations.of(context)?.count ?? 'count',
                         ),
                         keyboardType: TextInputType.number,
                       ),
@@ -148,7 +180,9 @@ class _MyScorePageState extends State<Myscore> {
                         keyboardType: TextInputType.multiline,
                         maxLines: 4,
                         decoration: InputDecoration(
-                          hintText: "Enter Remarks",
+                          hintText:
+                              AppLocalizations.of(context)?.enterremarks ??
+                                  'Enter Remarks',
                           focusedBorder: const OutlineInputBorder(
                               borderSide:
                                   BorderSide(width: 1, color: Colors.grey)),
@@ -167,7 +201,8 @@ class _MyScorePageState extends State<Myscore> {
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColor.primary,
                         ),
-                        child: const Text('Submit',
+                        child: Text(
+                            AppLocalizations.of(context)?.submit ?? 'submit',
                             style: TextStyle(color: Colors.white)),
                       ),
                     ],
@@ -186,12 +221,20 @@ class _MyScorePageState extends State<Myscore> {
 
     if (occurance.isEmpty) {
       AppUtils.showSingleDialogPopup(
-          context, "Please Enter Count!", "Ok", exitpopup);
+          context,
+          AppLocalizations.of(context)?.pleaseentercount ??
+              "Please Enter Count!",
+          AppLocalizations.of(context)?.Ok ?? "Ok",
+          exitpopup);
       return;
     }
     if (altercourseid.isEmpty) {
       AppUtils.showSingleDialogPopup(
-          context, "Please Choose Course!", "Ok", exitpopup);
+          context,
+          AppLocalizations.of(context)?.pleasechoosecourse ??
+              "Please Choose Course!",
+          AppLocalizations.of(context)?.Ok ?? "Ok",
+          exitpopup);
       return;
     }
     setState(() {

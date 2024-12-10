@@ -11,9 +11,17 @@ class Prefs {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove("Name");
     await prefs.remove("Gender");
-    // Add more preferences to clear if needed
+    
   }
+
   // Setters
+
+
+  
+  static Future<bool> setLanguage(String key, String value) async =>
+    await _prefs.setString(key, value);
+  
+ 
   static Future<bool> setUserName(String key, String value) async =>
       await _prefs.setString(key, value);
 
@@ -38,6 +46,9 @@ class Prefs {
   static Future<bool> setGender(String key, String value) async =>
       await _prefs.setString(key, value);
 
+  static Future<bool> setSuperUser(String key, int value) async =>
+      await _prefs.setInt(key, value);
+
   // Getters
   static bool? getLoggedIn(String key) => _prefs.getBool(key);
 
@@ -55,6 +66,9 @@ class Prefs {
 
   static String? getGender(String key) => _prefs.getString(key);
 
+  static int? getSupeUser(String key) => _prefs.getInt(key);
+   
+  static String? getLanguage(String key) => _prefs.getString(key); 
   // Deletes
   static Future<bool> remove(String key) async => await _prefs.remove(key);
 

@@ -1,10 +1,12 @@
-class MyScroreModel {
+import 'package:intl/intl.dart';  
+
+class MyMonthModel {
   bool? status;
   List<Message>? message;
 
-  MyScroreModel({this.status, this.message});
+  MyMonthModel({this.status, this.message});
 
-  MyScroreModel.fromJson(Map<String, dynamic> json) {
+  MyMonthModel.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     if (json['message'] != null) {
       message = <Message>[];
@@ -27,24 +29,36 @@ class MyScroreModel {
 class Message {
   int? occurance;
   String? coursename;
-  String? currentdate;
   String? remarks;
+  DateTime? date;  
 
-  Message({this.occurance, this.coursename, this.currentdate,this.remarks});
 
+  Message({this.occurance, this.coursename, this.remarks, this.date});
+
+ 
   Message.fromJson(Map<String, dynamic> json) {
     occurance = json['occurance'];
     coursename = json['coursename'];
-    currentdate = json['Currentdate'];
     remarks = json['remarks'];
+
+    String dateStr = json['date'] ?? "";
+    
+ 
+    try {
+     date = DateFormat("dd/MM/yyyy").parse(dateStr);  
+    } catch (e) {
+      print("Error parsing date: $dateStr");
+     date = null; 
+    }
   }
 
+ 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['occurance'] = occurance;
     data['coursename'] = coursename;
-    data['Currentdate'] = currentdate;
     data['remarks'] = remarks;
+    data['date'] = date != null ? DateFormat("dd/MM/yyyy").format(date!) : null; 
     return data;
   }
 }

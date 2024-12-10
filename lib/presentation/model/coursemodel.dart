@@ -1,5 +1,4 @@
-
-// Course Model Classes (same as before)
+// Course Model Classes
 class CourseModel {
   bool? status;
   List<Message>? message;

@@ -1,11 +1,13 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:yoga_centre_app/presentation/util/appcolor.dart';
 
 
-class AppUtils {
+class 
+AppUtils {
   static void hideKeyboard(context) {
     FocusScope.of(context).requestFocus(FocusNode());
   }
@@ -68,7 +70,7 @@ class AppUtils {
   static Widget buildHeaderText({final String? text}) {
     return Text(
       text.toString(),
-      style: const TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
+      style:  TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
     );
   }
 
@@ -105,7 +107,7 @@ class AppUtils {
                 children: [
                   Text(
                     header.toString(),
-                    style: const TextStyle(
+                    style:  TextStyle(
                         fontWeight: FontWeight.w700, color: Colors.white),
                   ),
                 ],

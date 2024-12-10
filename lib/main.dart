@@ -1,62 +1,120 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:month_year_picker/month_year_picker.dart';
+import 'package:yoga_centre_app/l10n/custommonthyearpicker.dart';
+import 'package:yoga_centre_app/l10n/localization.dart';
 import 'package:yoga_centre_app/presentation/splash.dart';
-
 import 'package:yoga_centre_app/presentation/util/appcolor.dart';
 import 'package:yoga_centre_app/presentation/util/pref.dart';
 
+
 void main() async {
-  SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
   WidgetsFlutterBinding.ensureInitialized();
   await Prefs.init();
-  runApp(const MainApp());
+
+  SystemChrome.setSystemUIOverlayStyle(
+    const SystemUiOverlayStyle(statusBarColor: Colors.transparent),
+  );
+
+
+  String? languageCode = await Prefs.getLanguage("Language");
+  languageCode ??= 'en';
+
+  runApp(MainApp(languageCode : languageCode));
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+class MainApp extends StatefulWidget{
+  final String languageCode;
 
+  const MainApp({Key? key, required this.languageCode}) : super(key: key);
+
+  static void setLocale(BuildContext context, Locale newLocale){
+    _MainAppState?  state =context.findAncestorStateOfType<_MainAppState>();
+    state?.setLocale(newLocale);
+  }
+  @override
+  _MainAppState createState() => _MainAppState();
+}
+
+class _MainAppState extends State<MainApp> {
+  late Locale _locale;
+
+  @override
+  void initState(){
+    super.initState();
+    _locale = Locale(widget.languageCode, widget.languageCode == 'ta' ? 'IN':'US');
+}
+
+
+   void setLocale(Locale newLocale){
+    setState(() {
+      _locale = newLocale;
+    });
+   }
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Yoga App',
       debugShowCheckedModeBanner: false,
-      // theme: ThemeClass.lightTheme,
-      // darkTheme: ThemeClass.darkTheme,
-      // themeMode: ThemeMode.system,
       theme: ThemeData(
-          fontFamily: 'Assistance',
-          primarySwatch: CompanyColors.black,
-          appBarTheme: const AppBarTheme(
-              backgroundColor: AppColor.primary,
-              foregroundColor: Colors.white //here you can give the text color
-              ),
-          cardTheme: const CardTheme(
-              surfaceTintColor: Colors.white, color: Colors.white)),
+        fontFamily: 'Assistance',
+        primarySwatch: CompanyColors.black,
+        appBarTheme: AppBarTheme(
+          backgroundColor: AppColor.primary,
+          foregroundColor: Colors.white,
+         ),
+         cardTheme: const CardTheme(
+          surfaceTintColor: Colors.white,
+          color: Colors.white,
+         ),
+         ),
+        home: const SplashScreen(),
+        localizationsDelegates: const [
 
-      home: const SplashScreen(),
+          GlobalMaterialLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          MonthYearPickerLocalizations.delegate,
+          AppLocalizations.delegate,
+          CustomMonthYearPickerDelegate(),
+        ],
+        supportedLocales: const [
+          Locale('en', 'US'),
+          Locale('ta','IN'),
+        ],
+        locale: _locale,
+        localeResolutionCallback: (locale, supportedLocales){
+          for (var supportedLocale in supportedLocales) {
+           if (supportedLocale.languageCode == locale?.languageCode) {
+              return supportedLocale;
+            }
+          }
+          return const Locale('en','US');
+        },
     );
   }
-}
+  }
 
 class CompanyColors {
-  CompanyColors._(); // this basically makes it so you can instantiate this class
+  
+  CompanyColors._();
 
-  static const _PrimaryValue = 0xFF186F65;
+  static const int _primaryValue = 0xFF186F65;
 
   static const MaterialColor black = MaterialColor(
-    _PrimaryValue,
+    _primaryValue, 
     <int, Color>{
-      50: Color(_PrimaryValue),
-      100: Color(_PrimaryValue),
-      200: Color(_PrimaryValue),
-      300: Color(_PrimaryValue),
-      400: Color(_PrimaryValue),
-      500: Color(_PrimaryValue),
-      600: Color(_PrimaryValue),
-      700: Color(_PrimaryValue),
-      800: Color(_PrimaryValue),
-      900: Color(_PrimaryValue),
+      50: Color(_primaryValue),
+      100: Color(_primaryValue),
+      200:Color(_primaryValue),
+      300:Color(_primaryValue),
+      400:Color(_primaryValue),
+      500:Color(_primaryValue),
+      600:Color(_primaryValue),
+      700:Color(_primaryValue),
+      800:Color(_primaryValue),
+      900:Color(_primaryValue),
     },
-  );
+    );
 }
